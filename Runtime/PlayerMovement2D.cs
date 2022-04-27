@@ -9,12 +9,12 @@ namespace Padoru.Movement
 		[SerializeField] private float smoothness = 0.1f;
 		[SerializeField] private bool useRawInput = false;
 
-		private IMovementBehaviour movementBehaviour;
-		private Vector3 direction;
+		private IMovementBehaviour2D movementBehaviour;
+		private Vector2 direction;
 
 		private void Awake()
 		{
-			movementBehaviour = GetComponent<IMovementBehaviour>();
+			movementBehaviour = GetComponent<IMovementBehaviour2D>();
 		}
 
 		private void Update()
