@@ -12,6 +12,7 @@ namespace Padoru.Movement
 		private Rigidbody2D rb;
 
 		public Vector2 Direction { get; set; }
+		public bool Enabled { get; set; } = true;
 
 		private void Awake()
 		{
@@ -20,6 +21,11 @@ namespace Padoru.Movement
 
 		private void Update()
 		{
+			if (!Enabled)
+			{
+				return;
+			}
+
 			if(rb == null)
 			{
 				Debug.LogError($"Cannot move object. Null {typeof(Rigidbody2D)}");

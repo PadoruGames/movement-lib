@@ -8,9 +8,15 @@ namespace Padoru.Movement
 		[SerializeField] private bool rotateTowardsVelocity = true;
 
 		public Vector2 Direction { get; set; }
+		public bool Enabled { get; set; } = true;
 
 		private void Update()
 		{
+			if (!Enabled)
+			{
+				return;
+			}
+
 			Move(Time.deltaTime);
 			if (rotateTowardsVelocity)
 			{
