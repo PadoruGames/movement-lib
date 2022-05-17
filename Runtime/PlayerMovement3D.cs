@@ -4,7 +4,7 @@ using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Movement
 {
-	public class PlayerAxisMovement : MonoBehaviour
+	public class PlayerMovement3D : MonoBehaviour
 	{
 		[SerializeField] private float smoothness = 0.1f;
 
