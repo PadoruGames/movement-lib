@@ -4,6 +4,7 @@ using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Movement
 {
+	[RequireComponent(typeof(IMovementBehaviour2D))]
 	public class ForwardMovement2D : MonoBehaviour
 	{
 		private IMovementBehaviour2D movementBehaviour;
