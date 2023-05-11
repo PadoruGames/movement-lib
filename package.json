@@ -1,6 +1,6 @@
 {
   "name": "com.padoru.movement-lib",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "Padoru Movement",
   "description": "A library to handle movement in Unity games",
   "unity": "2020.3"
