@@ -22,7 +22,7 @@ namespace Padoru.Movement
 				return;
 			}
 
-			movementBehaviour.Direction = transform.right;
+			movementBehaviour.TargetDirection = transform.right;
 		}
 	}
 }

@@ -6,11 +6,9 @@ namespace Padoru.Movement
 {
 	public class PlayerMovement2D : MonoBehaviour
 	{
-		[SerializeField] private float smoothness = 0.1f;
 		[SerializeField] private bool useRawInput = false;
 
 		private IMovementBehaviour2D movementBehaviour;
-		private Vector2 direction;
 
 		private void Awake()
 		{
@@ -25,21 +23,20 @@ namespace Padoru.Movement
 				return;
 			}
 
-			Vector2 targetDirection;
+			var inputDirection = GetInputVector();
+			inputDirection = Vector2.ClampMagnitude(inputDirection, 1);
+
+			movementBehaviour.TargetDirection = inputDirection;
+		}
+
+		private Vector2 GetInputVector()
+		{
 			if (useRawInput)
 			{
-				targetDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-			}
-			else
-			{
-				targetDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+				return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 			}
 
-			targetDirection = Vector2.ClampMagnitude(targetDirection, 1);
-
-			direction = useRawInput ? targetDirection : Vector2.Lerp(direction, targetDirection, smoothness);
-
-			movementBehaviour.Direction = direction;
+			return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 		}
 	}
 }

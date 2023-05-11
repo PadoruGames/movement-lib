@@ -5,9 +5,13 @@ namespace Padoru.Movement
 	public class TransformMovementBehaviour2D : MonoBehaviour, IMovementBehaviour2D
 	{
 		[SerializeField] private float speed = 7;
+		[SerializeField] private float smoothness = 0.1f;
 		[SerializeField] private bool rotateTowardsVelocity = true;
 
-		public Vector2 Direction { get; set; }
+		private Vector2 direction;
+		
+		public Vector2 Direction => direction;
+		public Vector2 TargetDirection { get; set; }
 		public bool Enabled { get; set; } = true;
 
 		private void Update()
@@ -26,7 +30,8 @@ namespace Padoru.Movement
 
 		private void Move(float deltaTime)
 		{
-			var movement = new Vector3(Direction.x, Direction.y) * speed * deltaTime;
+			direction = Vector2.Lerp(direction, TargetDirection, smoothness);
+			var movement = new Vector3(direction.x, direction.y) * (speed * deltaTime);
 			transform.position += movement;
 		}
 

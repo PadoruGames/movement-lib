@@ -5,9 +5,13 @@ namespace Padoru.Movement
     public class TransformMovementBehaviour : MonoBehaviour, IMovementBehaviour
     {
         [SerializeField] private float speed = 7;
+        [SerializeField] private float smoothness = 0.1f;
         [SerializeField] private bool rotateTowardsVelocity = true;
 
-        public Vector3 Direction { get; set; }
+        private Vector3 direction;
+        
+        public Vector3 Direction => direction;
+        public Vector3 TargetDirection { get; set; }
         public bool Enabled { get; set; } = true;
 
         private void Update()
@@ -26,13 +30,23 @@ namespace Padoru.Movement
 
         private void Move(float deltaTime)
         {
-            var movement = Direction * (speed * deltaTime);
+            direction = Vector3.Lerp(direction, TargetDirection, smoothness);
+            
+            var movement = direction * (speed * deltaTime);
+            
             transform.position += movement;
         }
 
         private void Rotate()
         {
-            transform.forward = Direction.normalized;
+            if (TargetDirection == Vector3.zero)
+            {
+                return;
+            }
+            
+            var targetRotation = Quaternion.LookRotation(TargetDirection, Vector3.up);
+            
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothness);
         }
     }
 }

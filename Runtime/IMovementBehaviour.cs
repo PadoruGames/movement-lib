@@ -4,6 +4,10 @@ namespace Padoru.Movement
 {
 	public interface IMovementBehaviour
 	{
-		Vector3 Direction { get; set; }
+		bool Enabled { get; set; }
+
+		Vector3 TargetDirection { get; set; }
+		
+		Vector3 Direction { get; }
 	}
 }

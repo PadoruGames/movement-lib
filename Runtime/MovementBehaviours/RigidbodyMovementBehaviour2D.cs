@@ -7,11 +7,14 @@ namespace Padoru.Movement
 	public class RigidbodyMovementBehaviour2D : MonoBehaviour, IMovementBehaviour2D
 	{
 		[SerializeField] private float speed = 7;
+		[SerializeField] private float smoothness = 0.1f;
 		[SerializeField] private bool rotateTowardsVelocity = true;
 
 		private Rigidbody2D rb;
+		private Vector2 direction;
 
-		public Vector2 Direction { get; set; }
+		public Vector2 Direction => direction;
+		public Vector2 TargetDirection { get; set; }
 		public bool Enabled { get; set; } = true;
 
 		private void Awake()
@@ -41,7 +44,8 @@ namespace Padoru.Movement
 
 		private void Move(float deltaTime)
 		{
-			var movement = Direction * speed * deltaTime;
+			direction = Vector2.Lerp(direction, TargetDirection, smoothness);
+			var movement = new Vector2(direction.x, direction.y) * (speed * deltaTime);
 			rb.position += movement;
 		}
 
