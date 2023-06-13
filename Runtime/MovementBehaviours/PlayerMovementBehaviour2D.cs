@@ -4,29 +4,33 @@ using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Movement
 {
-	public class PlayerMovement2D : MonoBehaviour
+	public class PlayerMovementBehaviour2D : MonoBehaviour, IMovementBehaviour
 	{
+		[SerializeField] private float speed = 7;
 		[SerializeField] private bool useRawInput = false;
 
-		private IMovementBehaviour2D movementBehaviour;
+		private IMovement2D movement;
+
+		public Vector3 Direction { get; private set; }
 
 		private void Awake()
 		{
-			movementBehaviour = GetComponent<IMovementBehaviour2D>();
+			movement = GetComponent<IMovement2D>();
 		}
 
 		private void Update()
 		{
-			if (movementBehaviour == null)
+			if (movement == null)
 			{
-				Debug.LogError("There is no MovementBehaviour attached to this GameObject", gameObject);
+				Debug.LogError("There is no Movement attached to this GameObject", gameObject);
 				return;
 			}
 
 			var inputDirection = GetInputVector();
-			inputDirection = Vector2.ClampMagnitude(inputDirection, 1);
+			
+			Direction = Vector2.ClampMagnitude(inputDirection, 1);
 
-			movementBehaviour.TargetDirection = inputDirection;
+			movement.Move(Direction * speed * Time.deltaTime);
 		}
 
 		private Vector2 GetInputVector()
