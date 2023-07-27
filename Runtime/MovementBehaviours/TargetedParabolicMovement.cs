@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Movement
@@ -15,11 +14,11 @@ namespace Padoru.Movement
 		
 		private IMovement movement;
 		private Vector3 initialPosition;
-		private Vector3 targetPosition;
 		private Vector3 prevPosition;
 		private float timeOfFlight;
 
-		public Transform Target { get; set; }
+		// TODO: Get extrapolated initial position
+		public Vector3 TargetPosition { get; set; }
 		
 		private void Awake()
 		{
@@ -29,7 +28,6 @@ namespace Padoru.Movement
 		void Start()
 		{
 			initialPosition = transform.position;
-			targetPosition = GetTargetPosition();
 		}
 
 		private void Update()
@@ -43,12 +41,9 @@ namespace Padoru.Movement
 		{
 			prevPosition = transform.position;
 
-			// TODO: This causes weird behaviours when targets are approaching
-			targetPosition = GetTargetPosition();
-
 			var timeProgress = timeOfFlight / duration;
 			
-			var currentPosition = Parabola(initialPosition, targetPosition, height, timeProgress);
+			var currentPosition = Parabola(initialPosition, GetTargetPosition(), height, timeProgress);
 
 			var velocity = currentPosition - prevPosition;
 			
@@ -63,16 +58,16 @@ namespace Padoru.Movement
 
 			return new Vector3(mid.x, f(t) + Mathf.Lerp(start.y, end.y, t), mid.z);
 		}
-
+		
 		private Vector3 GetTargetPosition()
 		{
-			// TODO: Get extrapolated initial position?
-			return Target.position + Vector3.up * targetPositionHeightOffset;
+			return TargetPosition + Vector3.up * targetPositionHeightOffset;
 		}
 
 		private void OnDrawGizmos()
 		{
-			Gizmos.DrawSphere(GetTargetPosition(), 0.3f);
+			Gizmos.color = Color.red;
+			Gizmos.DrawSphere(GetTargetPosition(), 0.2f);
 		}
 	}
 }
