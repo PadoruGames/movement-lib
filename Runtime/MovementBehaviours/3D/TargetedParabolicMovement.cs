@@ -9,6 +9,7 @@ namespace Padoru.Movement
 		[SerializeField] private float duration = 7;
 		[SerializeField] private float height = 7;
 		[SerializeField] private float targetPositionHeightOffset = 1;
+		[SerializeField] private bool getMovementFromGameObject = true;
 		
 		private readonly float gravity = 9.8f;
 		
@@ -22,7 +23,10 @@ namespace Padoru.Movement
 		
 		private void Awake()
 		{
-			movement = GetComponent<IMovement>();
+			if (getMovementFromGameObject)
+			{
+				SetMovement(GetComponent<IMovement>());
+			}
 		}
 		
 		void Start()
@@ -37,7 +41,12 @@ namespace Padoru.Movement
 			Move();
 		}
 
-		void Move()
+		public void SetMovement(IMovement movement)
+		{
+			this.movement = movement;
+		}
+
+		private void Move()
 		{
 			prevPosition = transform.position;
 

@@ -8,6 +8,7 @@ namespace Padoru.Movement
 	{
 		[SerializeField] private float speed = 7;
 		[SerializeField] private bool useRawInput = false;
+		[SerializeField] private bool getMovementFromGameObject = true;
 		
 		private IMovement movement;
 
@@ -15,14 +16,17 @@ namespace Padoru.Movement
 
 		private void Awake()
 		{
-			movement = GetComponent<IMovement>();
+			if (getMovementFromGameObject)
+			{
+				SetMovement(GetComponent<IMovement>());
+			}
 		}
 
 		private void Update()
 		{
 			if (movement == null)
 			{
-				Debug.LogError("There is no Movement attached to this GameObject", gameObject);
+				Debug.LogError($"There is no {typeof(IMovement)} component set", gameObject);
 				return;
 			}
 
@@ -31,6 +35,11 @@ namespace Padoru.Movement
 			Direction = Vector3.ClampMagnitude(inputDirection, 1);
 
 			movement.Move(Direction * speed * Time.deltaTime);
+		}
+
+		public void SetMovement(IMovement movement)
+		{
+			this.movement = movement;
 		}
 
 		private Vector3 GetInputVector()

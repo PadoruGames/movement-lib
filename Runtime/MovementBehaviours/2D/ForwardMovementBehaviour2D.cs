@@ -4,18 +4,21 @@ using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Movement
 {
-	[RequireComponent(typeof(IMovement2D))]
-	public class ForwardMovementBehaviour2D : MonoBehaviour, IMovementBehaviour
+	public class ForwardMovementBehaviour2D : MonoBehaviour, IMovementBehaviour2D
 	{
 		[SerializeField] private float speed = 7;
+		[SerializeField] private bool getMovementFromGameObject = true;
 		
 		private IMovement2D movement;
 
-		public Vector3 Direction { get; private set; }
+		public Vector2 Direction { get; private set; }
 
 		private void Awake()
 		{
-			movement = GetComponent<IMovement2D>();
+			if (getMovementFromGameObject)
+			{
+				SetMovement(GetComponent<IMovement2D>());
+			}
 
 			Direction = transform.right;
 		}
@@ -29,6 +32,11 @@ namespace Padoru.Movement
 			}
 
 			movement.Move(Direction * speed * Time.deltaTime);;
+		}
+
+		public void SetMovement(IMovement2D movement)
+		{
+			this.movement = movement;
 		}
 	}
 }

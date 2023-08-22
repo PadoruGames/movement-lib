@@ -4,10 +4,10 @@ using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Movement
 {
-    [RequireComponent(typeof(IMovement))]
     public class ForwardMovementBehaviour : MonoBehaviour, IMovementBehaviour
     {
         [SerializeField] private float speed = 7;
+        [SerializeField] private bool getMovementFromGameObject = true;
 
         private IMovement movement;
 
@@ -15,7 +15,10 @@ namespace Padoru.Movement
 
         private void Awake()
         {
-            movement = GetComponent<IMovement>();
+            if (getMovementFromGameObject)
+            {
+                SetMovement(GetComponent<IMovement>());
+            }
 
             Direction = transform.forward;
         }
@@ -29,6 +32,11 @@ namespace Padoru.Movement
             }
 
             movement.Move(Direction * speed * Time.deltaTime);
+        }
+
+        public void SetMovement(IMovement movement)
+        {
+            this.movement = movement;
         }
     }
 }
