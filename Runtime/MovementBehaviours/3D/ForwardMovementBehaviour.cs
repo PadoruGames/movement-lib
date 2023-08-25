@@ -12,6 +12,11 @@ namespace Padoru.Movement
         private IMovement movement;
 
         public Vector3 Direction { get; private set; }
+        public bool Enabled
+        {
+            get => enabled;
+            set => enabled = value;
+        }
 
         private void Awake()
         {
